@@ -83,7 +83,7 @@ fun executeCommand(): Boolean {
         val mExitValue = mIpAddrProcess.waitFor()
 
         //println(" mExitValue $mExitValue")
-        Log.d("myTag", "ping time : " + mExitValue);
+        Log.d("myTag", "ping time: " + mExitValue);
 
         if (mExitValue == 0) {
             Log.d("myTag", "Connected to Googles IP")
