@@ -2,7 +2,8 @@ package com.example.lorawanapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import  com.teamlora.loralibrary.*
+import com.teamlora.loralibrary.*
+import java.net.URL
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,10 +15,11 @@ class MainActivity : AppCompatActivity() {
         //Call to the Logcat saying the app has started
         LogcatStart()
 
-        //Another example of a function in use
-        LogcatConnection()
+        //check connection again
+        ping(URL("https://www.google.com:443/"), this);
 
-        ExampleFunction()
+        //Check Internet Connection
+        executeCommand()
 
-    }
+}
 }
