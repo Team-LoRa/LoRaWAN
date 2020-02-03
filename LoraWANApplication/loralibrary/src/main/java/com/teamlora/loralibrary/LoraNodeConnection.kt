@@ -5,7 +5,9 @@ import android.content.Context.CONNECTIVITY_SERVICE
 import androidx.core.content.ContextCompat.getSystemService
 import android.net.ConnectivityManager
 import android.net.Proxy.getHost
+import android.renderscript.Sampler
 import android.util.Log
+import java.io.DataOutputStream
 import java.io.IOException
 import java.net.InetAddress
 import java.net.Socket
@@ -20,93 +22,49 @@ class Ping {
     var cnt = Integer.MAX_VALUE
 }
 
-fun ping(url: URL, ctx: Context): Ping {
+fun connect(url: URL, ctx: Context, message: String)
+{
+    Log.d("myTag", "first run")
 
-    Log.d("myTag", ":running ping test")
 
-    val r = Ping()
-    if (isNetworkConnected(ctx)) {
-        r.net = getNetworkType(ctx)
 
-        Log.d("myTag", "net: " + r.net)
-        Log.d("myTag", "host: " + r.host)
-        Log.d("myTag", "ip: " + r.ip)
-        Log.d("myTag", "dns: " + r.dns)
-        Log.d("myTag", "cnt: " + r.cnt)
+    try
+    {
+    val ipAddress: InetAddress?
 
-        try {
-            val hostAddress: String
-            val start = System.currentTimeMillis()
-            hostAddress = InetAddress.getByName(url.getHost()).getHostAddress()
-            val dnsResolved = System.currentTimeMillis()
-            val socket = Socket(hostAddress, url.getPort())
-            socket.close()
-            val probeFinish = System.currentTimeMillis()
-            r.dns = (dnsResolved - start).toInt()
-            r.cnt = (probeFinish - dnsResolved).toInt()
-            r.host = url.getHost()
-            r.ip = hostAddress
+    val buffer = ByteArray(4)
 
-        } catch (ex: Exception) {
+        //Assign Ip Address 127.0.0.1
+    buffer.set(0,127)
+    buffer.set(1,0)
+    buffer.set(2,0)
+    buffer.set(3,1)
+        Log.d("myTag", "went here1")
+    ipAddress = InetAddress.getByAddress(buffer)
+     Log.d("myTag", "went here2")
+    val s =  Socket(ipAddress,80)
+
+    val outputStream1 = DataOutputStream(s.getOutputStream())
+     outputStream1.writeUTF(message)
+      outputStream1.close()
+
+        Log.d("myTag", "it's connected bitch")
+
+
+
+    } catch (ex: Exception)
+        {
             Log.e("myTag", "Unable to Ping host")
         }
 
-    }
-    return r
-}
 
 
-
-fun isNetworkConnected(context: Context): Boolean {
-    Log.d("myTag", ":checking if network is connected")
-    val cm = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-    val activeNetwork = cm.activeNetworkInfo
-    return activeNetwork != null && activeNetwork.isConnectedOrConnecting
-}
-
-fun getNetworkType(context: Context): String? {
-    Log.d("myTag", ":checking network type")
-    val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val activeNetwork = cm.activeNetworkInfo
-    return activeNetwork?.typeName
 }
 
 
 
 
-fun executeCommand(): Boolean {
-    Log.d("myTag", ":re-testing connection")
 
-    val runtime = Runtime.getRuntime()
-    try {
-        val mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8")
-        val mExitValue = mIpAddrProcess.waitFor()
 
-        //println(" mExitValue $mExitValue")
-        Log.d("myTag", "ping time: " + mExitValue);
 
-        if (mExitValue == 0) {
-            Log.d("myTag", "Connected to Googles IP")
-            return true
-        }
-        else {
-            Log.e("myTag", "Could not connect to Googles IP")
-            return false
-        }
 
-    } catch (ignore: InterruptedException) {
-        ignore.printStackTrace()
-
-        //println(" Exception:$ignore")
-
-        Log.d("myTag", "Exception : " + ignore)
-    } catch (e: IOException) {
-        e.printStackTrace()
-
-        //println(" Exception:$e")
-        Log.d("myTag", "Exception : " + e)
-
-    }
-
-    return false
-}
