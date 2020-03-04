@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val button = findViewById<Button>(R.id.button)
-        val message = findViewById<EditText>(R.id.message)
+        val IP = findViewById<EditText>(R.id.message)
 
 
 
@@ -28,12 +28,17 @@ class MainActivity : AppCompatActivity() {
 
         button.setOnClickListener {
 
-            connect(URL("https://www.google.com:443/"), this, message.getText().toString());
+             if(ping(IP.text.toString()))
+            {
+                Toast.makeText(this, "connected", Toast.LENGTH_LONG).show()
+            }
 
             //Check Internet Connection
 
-
-            Toast.makeText(this, message.getText().toString(), Toast.LENGTH_LONG).show()
+            else
+            {
+                Toast.makeText(this, "Connection Failed", Toast.LENGTH_LONG).show()
+            }
 
         }
 
