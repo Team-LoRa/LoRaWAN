@@ -7,14 +7,19 @@ import android.net.ConnectivityManager
 import android.net.Proxy.getHost
 import android.renderscript.Sampler
 import android.util.Log
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.DataOutputStream
 import java.io.IOException
+import java.io.File
 import java.io.PrintWriter
 import java.net.*
 import java.nio.channels.SocketChannel
 import java.nio.charset.Charset
 import java.util.*
 import kotlin.*
+import kotlin.math.pow
+import kotlin.reflect.typeOf
 
 class Ping {
     var net: String? = "NO_CONNECTION"
@@ -23,6 +28,8 @@ class Ping {
     var dns = Integer.MAX_VALUE
     var cnt = Integer.MAX_VALUE
 }
+
+
 
 fun ping(ipAdress: String): Boolean {
     Log.d("myTag", "current message ip: "+ ipAdress)
@@ -56,7 +63,8 @@ fun ping(ipAdress: String): Boolean {
 }
 
 
-fun SendLoRaMessage(apiName: String, par: String): Boolean
+
+fun oldSendLoRaMessage(apiName: String, par: String): Boolean
 {
     try {
 
@@ -84,19 +92,19 @@ fun SendLoRaMessage(apiName: String, par: String): Boolean
         Log.d("myTag", "went here3")
 
         s = Socket(ipAddress, 2080)
-        
+
         Log.d("myTag", "went here4")
-        
+
         /*
-        
+
         pw = PrintWriter(s.getOutputStream())
         pw.write("helloooo")
         pw.flush()
         pw.close()
-        
+
 
         */
-        
+
         return true
 
     } catch (ex: Exception) {
@@ -106,12 +114,97 @@ fun SendLoRaMessage(apiName: String, par: String): Boolean
 
 }
 
-fun ReadEncodingTable()
-{
+
+class LoRaMessenger( val appName: String ) {
+
+    private var encodingTable : JSONObject? = null
+
+    private var encodedMessage : ByteArray = ByteArray( 0 )
+
+    fun sendLoRaMessage(apiName: String, parameters: Array<Any>)
+    {
+        Log.d("myTag", "sendLoRaMessage started" )
+        // Append the byte for the appName to the array
+        // Use !! to assert that encodingTable is not null
+        val appTable : JSONObject = encodingTable!!.getJSONObject( appName )
+
+        encodedMessage += appTable.getString( "byte_code" ).toInt().toByte()
+
+        // Append the byte for the apiName to the array
+        val apiTable : JSONObject = appTable.getJSONObject( apiName )
+
+        encodedMessage += apiTable.getString( "byte_code" ).toInt().toByte()
+
+        Log.d("myTag", encodedMessage[0].toString() )
+        Log.d("myTag", encodedMessage[1].toString() )
+
+        // Start tracking the current byte index to handle multi-byte parameters
+        var byteIndex : Int = 2
+
+        var paramIndex : Int = 0
+
+        val paramArray : JSONArray = apiTable.getJSONArray( "params" )
+
+        // Iterate through the parameters
+        for( parameter in parameters ) {
+            // Access the parameter's table
+            val paramTable : JSONObject = paramArray[ paramIndex ] as JSONObject
+
+            var paramValues = paramTable.get( "values" )
+
+            // Switch based on the parameter's type
+            if ( paramValues is JSONObject ) {
+                Log.d("myTag", "Encoding value" )
+                // Encode the parameter based on its value map and append it to byteArray
+                encodedMessage += paramValues.getString( parameter.toString() ).toInt().toByte()
+
+                byteIndex += 1
+            }
+            else if ( paramValues == "int-param" ) {
+                Log.d("myTag","Encoding integer" )
+                // Make sure the parameter is an Int to please Kotlin
+                if( parameter is Int ) {
+
+                    val two : Double = 2.0
+
+                    // Make sure that the passed value can be stored within the given number of bytes
+                    if( parameter < two.pow( (paramTable.getString( "length" ).toInt() * 8 ).toDouble() ) ) {
+
+                        var byteRepresentation = parameter.toInt().toByte()
+
+                        encodedMessage += byteRepresentation
+
+                        byteIndex += 1
+                    }
+
+                }
+
+            }
+            else if ( paramValues == "char-param" ){
+
+                /* TODO: Implement based on int-param code */
+
+            }
+            else {
+                Log.d("myTag", "Something went wrong" )
+            }
+
+            paramIndex += 1
+        }
+
+        Log.d("myTag", encodedMessage[0].toString() )
+        Log.d("myTag", encodedMessage[1].toString() )
+        Log.d("myTag", encodedMessage[2].toString() )
+        Log.d("myTag", encodedMessage[3].toString() )
+
+    }
+
+    fun readEncodingTable( jsonString: String )
+    {
+        // Convert the passed string to a JSONObject to access as the encoding table
+        encodingTable = JSONObject( jsonString )
+    }
 
 }
 
-fun encodingFromTable()
-{
 
-}

@@ -1,16 +1,17 @@
 package com.example.lorawanapplication
 
-import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import com.teamlora.loralibrary.*
-import java.io.DataOutputStream
-import java.net.Socket
-import java.net.URL
 import android.widget.Toast
+import java.io.InputStream;
+import androidx.appcompat.app.AppCompatActivity
+import com.teamlora.loralibrary.LogcatStart
+import com.teamlora.loralibrary.ping
+import com.teamlora.loralibrary.LoRaMessenger
+import java.nio.charset.Charset
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +25,26 @@ class MainActivity : AppCompatActivity() {
 
         //Call to the Logcat saying the app has started
         LogcatStart()
+
+        // Initialize the LoRaMessenger object
+        val messenger = LoRaMessenger( "TempControl" )
+
+        /* TODO: Improve the implementation below so that the developer does not need to call
+            readEncodingTable() themselves */
+
+        // Read the encoding table from assets
+        val jsonString: String =
+            application.assets.open("encoding_table.json").bufferedReader().use {
+                it.readText()
+            }
+
+        // Pass the encoding table to the messenger
+        messenger.readEncodingTable( jsonString )
+
+        val parameters : Array<Any> = arrayOf( 256, "Dining Room" )
+
+        messenger.sendLoRaMessage( "tempUp" , parameters)
+
 
 
         button.setOnClickListener {
