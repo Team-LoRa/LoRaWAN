@@ -158,7 +158,6 @@ class LoRaMessenger( val appName: String ) {
                 // Encode the parameter based on its value map and append it to byteArray
                 encodedMessage += paramValues.getString( parameter.toString() ).toInt().toByte()
 
-                byteIndex += 1
             }
             else if ( paramValues == "int-param" ) {
                 Log.d("myTag","Encoding integer" )
@@ -166,15 +165,31 @@ class LoRaMessenger( val appName: String ) {
                 if( parameter is Int ) {
 
                     val two : Double = 2.0
+                    val mask = 0xFF // binary 1111 1111
+                    var paramLength : Int = paramTable.getString( "length" ).toInt()
 
                     // Make sure that the passed value can be stored within the given number of bytes
-                    if( parameter < two.pow( (paramTable.getString( "length" ).toInt() * 8 ).toDouble() ) ) {
+                    if( parameter < two.pow( paramLength * 8 ).toDouble() )  {
 
-                        var byteRepresentation = parameter.toInt().toByte()
+                        // Convert the integer to an array of bytes
 
-                        encodedMessage += byteRepresentation
+                        // Start with an empty byte array
+                        var intByteArray : ByteArray = ByteArray( 0 )
 
-                        byteIndex += 1
+                        // Take the interger, 8 bits at a time, and append it to the byte array
+                        var _parameter : Int = parameter
+                        for( i in 0 until paramLength ) {
+                            intByteArray +=_parameter.and( mask ).toByte()
+                            _parameter = _parameter.shr( 8 )
+                        }
+
+                        // Reverse the byte array to maintain big endian order
+                        intByteArray.reverse()
+
+                        // Append the integer's bytes to the message
+                        encodedMessage += intByteArray
+
+                        byteIndex += paramLength
                     }
 
                 }
@@ -182,7 +197,7 @@ class LoRaMessenger( val appName: String ) {
             }
             else if ( paramValues == "char-param" ){
 
-                /* TODO: Implement based on int-param code */
+                // TODO: Implement character encoding
 
             }
             else {
@@ -192,10 +207,10 @@ class LoRaMessenger( val appName: String ) {
             paramIndex += 1
         }
 
-        Log.d("myTag", encodedMessage[0].toString() )
-        Log.d("myTag", encodedMessage[1].toString() )
-        Log.d("myTag", encodedMessage[2].toString() )
-        Log.d("myTag", encodedMessage[3].toString() )
+        Log.d("myTag", "Resulting byte array" )
+        for( byte in encodedMessage ) {
+            Log.d("myTag", byte.toString() )
+        }
 
     }
 

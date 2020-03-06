@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         // Pass the encoding table to the messenger
         messenger.readEncodingTable( jsonString )
 
-        val parameters : Array<Any> = arrayOf( 256, "Dining Room" )
+        val parameters : Array<Any> = arrayOf( 15420, "Dining Room" )
 
         messenger.sendLoRaMessage( "tempUp" , parameters)
 
