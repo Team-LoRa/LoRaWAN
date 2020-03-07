@@ -1,16 +1,13 @@
 package com.example.lorawanapplication
 
 import android.os.Bundle
-import android.util.Log
+import android.os.StrictMode
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-import java.io.InputStream;
 import androidx.appcompat.app.AppCompatActivity
-import com.teamlora.loralibrary.LogcatStart
-import com.teamlora.loralibrary.ping
 import com.teamlora.loralibrary.LoRaMessenger
-import java.nio.charset.Charset
+import com.teamlora.loralibrary.LogcatStart
+import com.teamlora.loralibrary.oldSendLoRaMessage
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +19,9 @@ class MainActivity : AppCompatActivity() {
         val IP = findViewById<EditText>(R.id.message)
 
 
+
+        //val threadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        //StrictMode.setThreadPolicy(threadPolicy)
 
         //Call to the Logcat saying the app has started
         LogcatStart()
@@ -45,9 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         messenger.sendLoRaMessage( "tempUp" , parameters)
 
-
-
-        button.setOnClickListener {
+        /*button.setOnClickListener {
 
              if(ping(IP.text.toString()))
             {
@@ -61,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Connection Failed", Toast.LENGTH_LONG).show()
             }
 
-        }
+        }*/
 
 
 }

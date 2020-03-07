@@ -1,25 +1,13 @@
 package com.teamlora.loralibrary
 
-import android.content.Context
-import android.content.Context.CONNECTIVITY_SERVICE
-import androidx.core.content.ContextCompat.getSystemService
-import android.net.ConnectivityManager
-import android.net.Proxy.getHost
-import android.renderscript.Sampler
+import android.os.Handler
 import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.DataOutputStream
-import java.io.IOException
-import java.io.File
-import java.io.PrintWriter
-import java.net.*
-import java.nio.channels.SocketChannel
-import java.nio.charset.Charset
-import java.util.*
-import kotlin.*
+import java.net.InetAddress
+import java.net.Socket
 import kotlin.math.pow
-import kotlin.reflect.typeOf
+
 
 class Ping {
     var net: String? = "NO_CONNECTION"
@@ -64,54 +52,27 @@ fun ping(ipAdress: String): Boolean {
 
 
 
-fun oldSendLoRaMessage(apiName: String, par: String): Boolean
+fun oldSendLoRaMessage(): Boolean
 {
-    try {
+    val buffer = ByteArray(4)
 
-        val pw: PrintWriter
+    //Assign Ip Address 192.168.1.101
+    buffer.set(0, 192.toByte())
+    buffer.set(1, 168.toByte())
+    buffer.set(2, 1.toByte())
+    buffer.set(3, 101.toByte())
+    Log.d("myTag","the url host is: " )
 
-        val s: Socket
+    val ipAddress = InetAddress.getByAddress(buffer)
 
-        val buffer = ByteArray(4)
+    Log.d("myTag", "the ip address is: " + ipAddress)
 
-        //Assign Ip Address 192.168.100.102
-        buffer.set(0, 192.toByte())
-        buffer.set(1, 168.toByte())
-        buffer.set(2, 1.toByte())
-        buffer.set(3, 102.toByte())
-        Log.d("myTag","the url host is: " )
-        Log.d("myTag", "went here1")
+    val clientSocket : Socket = Socket(ipAddress, 2080)
 
-        val ipAddress = InetAddress.getByAddress(buffer)
+    clientSocket.outputStream.write("Hello from the client!".toByteArray())
+    clientSocket.close()
 
-
-        Log.d("myTag", "went here2")
-
-        Log.d("myTag", "the ip address is: " + ipAddress)
-
-        Log.d("myTag", "went here3")
-
-        s = Socket(ipAddress, 2080)
-
-        Log.d("myTag", "went here4")
-
-        /*
-
-        pw = PrintWriter(s.getOutputStream())
-        pw.write("helloooo")
-        pw.flush()
-        pw.close()
-
-
-        */
-
-        return true
-
-    } catch (ex: Exception) {
-        Log.e("myTag", "Unable to Ping host")
-        return false
-    }
-
+    return false
 }
 
 
@@ -212,6 +173,52 @@ class LoRaMessenger( val appName: String ) {
             Log.d("myTag", byte.toString() )
         }
 
+        // Send off the encoded message
+        val buffer = ByteArray(4)
+
+        //Assign Ip Address 192.168.1.101
+        buffer.set(0, 192.toByte())
+        buffer.set(1, 168.toByte())
+        buffer.set(2, 1.toByte())
+        buffer.set(3, 101.toByte())
+        Log.d("myTag","the url host is: " )
+
+        val ipAddress = InetAddress.getByAddress(buffer)
+
+        Log.d("myTag", "the ip address is: " + ipAddress)
+
+        val clientSocket : Socket = Socket(ipAddress, 2080)
+
+        clientSocket.outputStream.write( encodedMessage )
+        clientSocket.close()
+
+        /*
+        val runnable: Runnable
+        val newHandler: Handler
+
+        newHandler = Handler()
+        runnable = Runnable {
+            // Send off the encoded message
+            val buffer = ByteArray(4)
+
+            //Assign Ip Address 192.168.1.101
+            buffer.set(0, 192.toByte())
+            buffer.set(1, 168.toByte())
+            buffer.set(2, 1.toByte())
+            buffer.set(3, 101.toByte())
+            Log.d("myTag","the url host is: " )
+
+            val ipAddress = InetAddress.getByAddress(buffer)
+
+            Log.d("myTag", "the ip address is: " + ipAddress)
+
+            val clientSocket : Socket = Socket(ipAddress, 2080)
+
+            clientSocket.outputStream.write( encodedMessage )
+            clientSocket.close()
+        }
+        newHandler.post(runnable)
+        */
     }
 
     fun readEncodingTable( jsonString: String )
