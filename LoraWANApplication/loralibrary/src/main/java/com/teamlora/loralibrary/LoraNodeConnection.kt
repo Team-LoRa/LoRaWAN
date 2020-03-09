@@ -174,23 +174,28 @@ class LoRaMessenger( val appName: String ) {
         }
 
         // Send off the encoded message
-        val buffer = ByteArray(4)
+        val Thread1: Thread = Thread()
+        {
 
-        //Assign Ip Address 192.168.1.101
-        buffer.set(0, 192.toByte())
-        buffer.set(1, 168.toByte())
-        buffer.set(2, 1.toByte())
-        buffer.set(3, 101.toByte())
-        Log.d("myTag","the url host is: " )
+            val buffer = ByteArray(4)
 
-        val ipAddress = InetAddress.getByAddress(buffer)
+            //Assign Ip Address 192.168.1.101
+            buffer.set(0, 192.toByte())
+            buffer.set(1, 168.toByte())
+            buffer.set(2, 1.toByte())
+            buffer.set(3, 101.toByte())
+            Log.d("myTag", "the url host is: ")
 
-        Log.d("myTag", "the ip address is: " + ipAddress)
+            val ipAddress = InetAddress.getByAddress(buffer)
 
-        val clientSocket : Socket = Socket(ipAddress, 2080)
+            Log.d("myTag", "the ip address is: " + ipAddress)
 
-        clientSocket.outputStream.write( encodedMessage )
-        clientSocket.close()
+            val clientSocket: Socket = Socket(ipAddress, 2080)
+
+            clientSocket.outputStream.write(encodedMessage)
+            clientSocket.close()
+        }
+        Thread1.start()
 
         /*
         val runnable: Runnable
