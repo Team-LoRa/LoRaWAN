@@ -4,8 +4,10 @@ import android.os.Handler
 import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
+import java.lang.Double.doubleToLongBits
 import java.net.InetAddress
 import java.net.Socket
+import java.nio.ByteBuffer
 import kotlin.math.pow
 
 
@@ -78,6 +80,9 @@ fun oldSendLoRaMessage(): Boolean
 
 class LoRaMessenger( val appName: String ) {
 
+    val FLOAT_BYTE_LENGTH : Int = 4
+    val DOUBLE_BYTE_LENGTH : Int = 8
+
     private var encodingTable : JSONObject? = null
 
     private var encodedMessage : ByteArray = ByteArray( 0 )
@@ -122,11 +127,11 @@ class LoRaMessenger( val appName: String ) {
             }
             else if ( paramValues == "int-param" ) {
                 Log.d("myTag","Encoding integer" )
-                // Make sure the parameter is an Int to please Kotlin
+                // Make sure the parameter is an Int
                 if( parameter is Int ) {
 
                     val two : Double = 2.0
-                    val mask = 0xFF // binary 1111 1111
+                    val mask : Int = 0xFF // binary 1111 1111
                     var paramLength : Int = paramTable.getString( "length" ).toInt()
 
                     // Make sure that the passed value can be stored within the given number of bytes
@@ -156,8 +161,72 @@ class LoRaMessenger( val appName: String ) {
                 }
 
             }
-            else if ( paramValues == "char-param" ){
+            else if ( paramValues == "float-param" ){
+                Log.d("myTag", "Encoding float" )
+                // Make sure the parameter is a Float
+                if( parameter is Float ) {
 
+                    val mask : Int = 0xFF // binary 1111 1111
+
+                    // Convert the floating point number to an integer that represents the same
+                    // raw bits
+                    val int = parameter.toRawBits()
+                    Log.d("myTag", "Value as a long" )
+                    Log.d("myTag", int.toString() )
+
+                    var floatByteArray : ByteArray = ByteArray( 0 )
+
+                    // Take the integer, 8 bits at a time, and append it to the byte array
+                    var _int : Int = int
+                    for( i in 0 until FLOAT_BYTE_LENGTH ) {
+                        floatByteArray += _int.and( mask ).toByte()
+                        _int = _int.shr( 8 )
+                    }
+
+                    // Reverse the byte array to maintain big endian order
+                    floatByteArray.reverse()
+
+                    // Append the float's bytes to the message
+                    encodedMessage += floatByteArray
+
+                    byteIndex += FLOAT_BYTE_LENGTH
+                }
+
+            }
+            else if ( paramValues == "double-param" ){
+                Log.d("myTag", "Encoding double" )
+                // Make sure the parameter is a Double
+                if( parameter is Double ) {
+
+                    val mask : Long = 0xFF // binary 1111 1111
+
+                    // Convert the double precision floating point number to a long that represents
+                    // the same raw bits
+                    val long = parameter.toRawBits()
+                    Log.d("myTag", "Value as a long" )
+                    Log.d("myTag", long.toString() )
+
+                    var doubleByteArray : ByteArray = ByteArray( 0 )
+
+                    // Take the long, 8 bits at a time, and append it to the byte array
+                    var _long : Long = long
+                    for( i in 0 until DOUBLE_BYTE_LENGTH ) {
+                        doubleByteArray += _long.and( mask ).toByte()
+                        _long = _long.shr( 8 )
+                    }
+
+                    // Reverse the byte array to maintain big endian order
+                    doubleByteArray.reverse()
+
+                    // Append the double's bytes to the message
+                    encodedMessage += doubleByteArray
+
+                    byteIndex += DOUBLE_BYTE_LENGTH
+                }
+
+            }
+            else if ( paramValues == "char-param" ){
+                Log.d("myTag", "Encoding char" )
                 // TODO: Implement character encoding
 
             }
@@ -196,34 +265,6 @@ class LoRaMessenger( val appName: String ) {
             clientSocket.close()
         }
         Thread1.start()
-
-        /*
-        val runnable: Runnable
-        val newHandler: Handler
-
-        newHandler = Handler()
-        runnable = Runnable {
-            // Send off the encoded message
-            val buffer = ByteArray(4)
-
-            //Assign Ip Address 192.168.1.101
-            buffer.set(0, 192.toByte())
-            buffer.set(1, 168.toByte())
-            buffer.set(2, 1.toByte())
-            buffer.set(3, 101.toByte())
-            Log.d("myTag","the url host is: " )
-
-            val ipAddress = InetAddress.getByAddress(buffer)
-
-            Log.d("myTag", "the ip address is: " + ipAddress)
-
-            val clientSocket : Socket = Socket(ipAddress, 2080)
-
-            clientSocket.outputStream.write( encodedMessage )
-            clientSocket.close()
-        }
-        newHandler.post(runnable)
-        */
     }
 
     fun readEncodingTable( jsonString: String )
