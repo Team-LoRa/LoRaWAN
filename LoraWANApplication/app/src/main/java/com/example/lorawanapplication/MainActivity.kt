@@ -36,7 +36,9 @@ class MainActivity : AppCompatActivity() {
         val jsonString: String =
             application.assets.open("encoding_table.json").bufferedReader().use {
                 it.readText()
+
             }
+
 
         // Pass the encoding table to the messenger
         messenger.readEncodingTable( jsonString )

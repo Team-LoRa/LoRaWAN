@@ -10,129 +10,86 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="570dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginLeft="1000dp"
-        android:layout_marginBottom="450dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.97"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.18"
         app:srcCompat="@drawable/logo" />
 
     <Spinner
         android:id="@+id/appSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="333dp"
-        android:layout_marginTop="73dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="200dp"
+        android:layout_marginTop="15dp"
         android:entries="@array/app_Names"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.543"
+        app:layout_constraintHorizontal_bias="0.525"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.154" />
+        app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="176dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="500dp"
+        android:layout_marginTop="30dp"
         android:text="Choose a Room: "
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.596"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintTop_toBottomOf="@+id/appSpinner" />
 
     <Spinner
         android:id="@+id/roomSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="167dp"
-        android:layout_marginTop="120dp"
-        android:layout_marginLeft="175dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="15dp"
         android:entries="@array/room_Names"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.536"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.151" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="307dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="500dp"
+        android:layout_marginTop="15dp"
         android:text="Choose an App Name: "
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.634" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="50dp"
         android:ems="10"
         android:hint="Enter the message here"
         android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.199" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomSpinner" />
 
     <Button
         android:id="@+id/Connectbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="382dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="280dp"
+        android:layout_marginTop="15dp"
         android:text="Connect"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.349"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.493" />
+        app:layout_constraintTop_toBottomOf="@+id/message" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="197dp"
-        android:layout_marginTop="427dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="30dp"
         android:text="Send"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.875" />
-
+        app:layout_constraintTop_toBottomOf="@+id/Connectbutton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
