@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val sendButton = findViewById<Button>(R.id.button)
         val connectButton = findViewById<Button>(R.id.Connectbutton)
-        val message = findViewById<EditText>(R.id.message)
+        val IP = findViewById<EditText>(R.id.message)
         val appSpinner = findViewById<Spinner>(R.id.appSpinner)
         val roomSpinner = findViewById<Spinner>(R.id.roomSpinner)
 
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     //Check Internet Connection
     connectButton.setOnClickListener {
 
-        if(ping())
+        if(ping(IP.text.toString()))
         {
             Toast.makeText(this, "The connection is available", Toast.LENGTH_LONG).show()
         }
