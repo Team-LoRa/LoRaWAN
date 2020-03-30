@@ -8,15 +8,19 @@ import androidx.appcompat.app.AppCompatActivity
 import com.teamlora.loralibrary.LoRaMessenger
 import com.teamlora.loralibrary.LogcatStart
 import com.teamlora.loralibrary.oldSendLoRaMessage
-
+import com.teamlora.loralibrary.ping
+import android.util.Log
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val button = findViewById<Button>(R.id.button)
-        val IP = findViewById<EditText>(R.id.message)
+        val sendButton = findViewById<Button>(R.id.button)
+        val connectButton = findViewById<Button>(R.id.Connectbutton)
+        val message = findViewById<EditText>(R.id.message)
+        val appSpinner = findViewById<Spinner>(R.id.appSpinner)
+        val roomSpinner = findViewById<Spinner>(R.id.roomSpinner)
 
 
 
@@ -26,43 +30,48 @@ class MainActivity : AppCompatActivity() {
         //Call to the Logcat saying the app has started
         LogcatStart()
 
-        // Initialize the LoRaMessenger object
-        val messenger = LoRaMessenger( "TempControl" )
+       sendButton.setOnClickListener {
+
+        Log.d("myTag","the app spinner index is now on: " + appSpinner.selectedItem.toString())
+
+        // Initialize the LoRaMessenger object,   appSpinner example is TempControl
+        val messenger = LoRaMessenger(appSpinner.selectedItem.toString())
 
         /* TODO: Improve the implementation below so that the developer does not need to call
-            readEncodingTable() themselves */
+        readEncodingTable() themselves */
 
         // Read the encoding table from assets
         val jsonString: String =
             application.assets.open("encoding_table.json").bufferedReader().use {
-                it.readText()
-
+             it.readText()
             }
-
 
         // Pass the encoding table to the messenger
-        messenger.readEncodingTable( jsonString )
+        messenger.readEncodingTable(jsonString)
 
-        val parameters : Array<Any> = arrayOf( 15420, "Dining Room" )
+        Log.d("myTag","the room spinner index is now on: " + roomSpinner.selectedItem.toString())
 
-        messenger.sendLoRaMessage( "tempUp" , parameters)
+        //roomSpinner example is dining room
+        val parameters: Array<Any> = arrayOf(15420, roomSpinner.selectedItem.toString())
 
-        /*button.setOnClickListener {
+        //message example is tempUp
+        messenger.sendLoRaMessage("tempUp", parameters)
 
-             if(ping(IP.text.toString()))
-            {
-                Toast.makeText(this, "connected", Toast.LENGTH_LONG).show()
-            }
+}
 
-            //Check Internet Connection
+    //Check Internet Connection
+    connectButton.setOnClickListener {
 
-            else
-            {
-                Toast.makeText(this, "Connection Failed", Toast.LENGTH_LONG).show()
-            }
+        if(ping())
+        {
+            Toast.makeText(this, "The connection is available", Toast.LENGTH_LONG).show()
+        }
+        else
+        {
+            Toast.makeText(this, "The connection is not available", Toast.LENGTH_LONG).show()
+        }
 
-        }*/
-
+    }
 
 }
 }
