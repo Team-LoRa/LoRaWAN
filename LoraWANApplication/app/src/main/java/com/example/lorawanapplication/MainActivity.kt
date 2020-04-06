@@ -20,31 +20,32 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        //val threadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        //StrictMode.setThreadPolicy(threadPolicy)
+        val threadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(threadPolicy)
 
         //Call to the Logcat saying the app has started
         LogcatStart()
 
         // Initialize the LoRaMessenger object
-        val messenger = LoRaMessenger( "TempControl" )
+        button.setOnClickListener {
+            val messenger = LoRaMessenger("OpenCellID")
 
-        /* TODO: Improve the implementation below so that the developer does not need to call
+            /* TODO: Improve the implementation below so that the developer does not need to call
             readEncodingTable() themselves */
 
-        // Read the encoding table from assets
-        val jsonString: String =
-            application.assets.open("encoding_table.json").bufferedReader().use {
-                it.readText()
-            }
+            // Read the encoding table from assets
+            val jsonString: String =
+                application.assets.open("encoding_table.json").bufferedReader().use {
+                    it.readText()
+                }
 
-        // Pass the encoding table to the messenger
-        messenger.readEncodingTable( jsonString )
+            // Pass the encoding table to the messenger
+            messenger.readEncodingTable(jsonString)
 
-        val parameters : Array<Any> = arrayOf( 15420, "Dining Room" )
+            val parameters: Array<Any> = arrayOf( 12.314, 13.564, 46, 2367, 85476, 1348493027 )
 
-        messenger.sendLoRaMessage( "tempUp" , parameters)
-
+            messenger.sendLoRaMessage("measure/add", parameters)
+        }
         /*button.setOnClickListener {
 
              if(ping(IP.text.toString()))
