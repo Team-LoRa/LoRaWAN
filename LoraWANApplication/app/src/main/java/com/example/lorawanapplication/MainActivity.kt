@@ -7,7 +7,6 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.teamlora.loralibrary.LoRaMessenger
 import com.teamlora.loralibrary.LogcatStart
-import com.teamlora.loralibrary.oldSendLoRaMessage
 import com.teamlora.loralibrary.ping
 import android.util.Log
 import android.widget.Spinner
@@ -20,8 +19,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val sendButton = findViewById<Button>(R.id.button)
         val connectButton = findViewById<Button>(R.id.Connectbutton)
-        val IP = findViewById<EditText>(R.id.message)
         val appSpinner = findViewById<Spinner>(R.id.appSpinner)
+        val apiSpinner = findViewById<Spinner>(R.id.apiName)
         val roomSpinner = findViewById<Spinner>(R.id.roomSpinner)
 
 
@@ -53,14 +52,15 @@ class MainActivity : AppCompatActivity() {
         val parameters: Array<Any> = arrayOf(15420, roomSpinner.selectedItem.toString())
 
         //message example is tempUp
-        messenger.sendLoRaMessage("tempUp", parameters)
+        messenger.sendLoRaMessage(apiSpinner.selectedItem.toString(), parameters)
 
 }
 
     //Check Internet Connection
     connectButton.setOnClickListener {
 
-        if(ping(IP.text.toString()))
+        // you can delete the parameter in the ping function inside of the loRaMessenger library
+        if(ping())
         {
             Toast.makeText(this, "The connection is available", Toast.LENGTH_LONG).show()
         }
