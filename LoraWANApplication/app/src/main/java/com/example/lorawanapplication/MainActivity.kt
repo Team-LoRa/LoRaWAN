@@ -10,6 +10,8 @@ import com.teamlora.loralibrary.LogcatStart
 import com.teamlora.loralibrary.oldSendLoRaMessage
 import com.teamlora.loralibrary.ping
 import android.util.Log
+import android.widget.Spinner
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,10 +24,6 @@ class MainActivity : AppCompatActivity() {
         val appSpinner = findViewById<Spinner>(R.id.appSpinner)
         val roomSpinner = findViewById<Spinner>(R.id.roomSpinner)
 
-
-
-        //val threadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        //StrictMode.setThreadPolicy(threadPolicy)
 
         //Call to the Logcat saying the app has started
         LogcatStart()
