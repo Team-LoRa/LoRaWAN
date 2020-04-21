@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">LoraWAN Application</string>
+    
+    <string-array name="app_Names">
+        <item>TempControl</item>
+        <item>VolControl</item>
+
+    </string-array>
+
+    <string-array name="room_Names">
+        <item>Dinning Room</item>
+        <item>Living Room</item>
+        <item>Bed Room</item>
+        <item>Ketchen</item>
+        <item>Bathroom</item>
+
+    </string-array>
+    
+    <string-array name = "api_Names">
+        <item>tempUp</item>
+        <item>tempDown</item>
+        <item>volUp</item>
+        <item>volDown</item>
+
+    </string-array>
+    
+</resources>
