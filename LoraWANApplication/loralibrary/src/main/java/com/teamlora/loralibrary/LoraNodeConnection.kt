@@ -1,88 +1,20 @@
 package com.teamlora.loralibrary
 
-import android.os.Handler
+
+
 import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
-import java.lang.Double.doubleToLongBits
 import java.lang.Integer.min
 import java.net.InetAddress
 import java.net.Socket
-import java.nio.ByteBuffer
-import java.util.*
 import kotlin.math.ceil
 import kotlin.math.pow
 import kotlin.random.Random.Default.nextBytes
 
 
-class Ping {
-    var net: String? = "NO_CONNECTION"
-    var host = "google-public-dns-a.google.com"
-    var ip = "8.8.8.8"
-    var dns = Integer.MAX_VALUE
-    var cnt = Integer.MAX_VALUE
-}
 
-
-
-fun ping(ipAdress: String): Boolean {
-    Log.d("myTag", "current message ip: "+ ipAdress)
-    
-    //The ip you are trying to connect
-    val ipAdressss = "192.168.0.102"
-    val runtime = Runtime.getRuntime()
-
-
-    try {
-        
-        val mIpAddrProcess = runtime.exec("/system/bin/ping -c 1" + ipAdress)
-        val ExitValue = mIpAddrProcess.waitFor()
-        Log.d("myTag", "mExitValue is: " + ExitValue)
-
-        Log.d("myTag", "current message ip: "+ ipAdress)
-        
-        if(ExitValue == 0)
-        {
-            return true
-        }
-        else
-        {
-            return false
-        }
-
-    } catch (ex: Exception) {
-        Log.e("myTag", "Unable to Ping host")
-        return false
-    }
-}
-
-
-
-fun oldSendLoRaMessage(): Boolean
-{
-    val buffer = ByteArray(4)
-
-    //Assign Ip Address 192.168.1.101
-    buffer.set(0, 192.toByte())
-    buffer.set(1, 168.toByte())
-    buffer.set(2, 1.toByte())
-    buffer.set(3, 101.toByte())
-    Log.d("myTag","the url host is: " )
-
-    val ipAddress = InetAddress.getByAddress(buffer)
-
-    Log.d("myTag", "the ip address is: " + ipAddress)
-
-    val clientSocket : Socket = Socket(ipAddress, 2080)
-
-    clientSocket.outputStream.write("Hello from the client!".toByteArray())
-    clientSocket.close()
-
-    return false
-}
-
-
-class LoRaMessenger( val appName: String ) {
+class LoRaMessenger( val appName: String, jsonString: String ) {
 
     val FLOAT_BYTE_LENGTH : Int = 4
     val DOUBLE_BYTE_LENGTH : Int = 8
@@ -91,6 +23,11 @@ class LoRaMessenger( val appName: String ) {
     private var encodingTable : JSONObject? = null
 
     private var encodedMessage : ByteArray = ByteArray( 0 )
+
+    init {
+        // Convert the passed string to a JSONObject to access as the encoding table
+        encodingTable = JSONObject( jsonString )
+    }
 
     fun sendLoRaMessage(apiName: String, parameters: Array<Any>)
     {
@@ -328,12 +265,6 @@ class LoRaMessenger( val appName: String ) {
             clientSocket.close()
         }
         Thread1.start()
-    }
-
-    fun readEncodingTable( jsonString: String )
-    {
-        // Convert the passed string to a JSONObject to access as the encoding table
-        encodingTable = JSONObject( jsonString )
     }
 
 }

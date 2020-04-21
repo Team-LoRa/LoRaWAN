@@ -7,7 +7,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.teamlora.loralibrary.LoRaMessenger
 import com.teamlora.loralibrary.LogcatStart
-import com.teamlora.loralibrary.oldSendLoRaMessage
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,10 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize the LoRaMessenger object
         button.setOnClickListener {
-            val messenger = LoRaMessenger("OpenCellID")
-
-            /* TODO: Improve the implementation below so that the developer does not need to call
-            readEncodingTable() themselves */
+            /* TODO: Improve the implementation below so that the developer does not need to call readEncodingTable() themselves */
 
             // Read the encoding table from assets
             val jsonString: String =
@@ -40,28 +37,13 @@ class MainActivity : AppCompatActivity() {
                 }
 
             // Pass the encoding table to the messenger
-            messenger.readEncodingTable(jsonString)
+            val messenger = LoRaMessenger("OpenCellID", jsonString )
 
             val parameters: Array<Any> = arrayOf( 12.314, 13.564, 46, 2367, 85476, 1348493027 )
 
-            messenger.sendLoRaMessage("measure/add", parameters)
+            messenger.sendLoRaMessage("measure/add", parameters )
         }
-        /*button.setOnClickListener {
 
-             if(ping(IP.text.toString()))
-            {
-                Toast.makeText(this, "connected", Toast.LENGTH_LONG).show()
-            }
+    }
 
-            //Check Internet Connection
-
-            else
-            {
-                Toast.makeText(this, "Connection Failed", Toast.LENGTH_LONG).show()
-            }
-
-        }*/
-
-
-}
 }
