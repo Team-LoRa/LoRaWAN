@@ -1,0 +1,2 @@
+include ':app', ':loralibrary'
+rootProject.name='LoraWAN Application'
