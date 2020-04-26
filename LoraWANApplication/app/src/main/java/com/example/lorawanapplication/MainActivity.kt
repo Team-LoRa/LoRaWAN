@@ -15,10 +15,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val button = findViewById<Button>(R.id.button)
-        val IP = findViewById<EditText>(R.id.message)
-
-
+        val sendButton = findViewById<Button>(R.id.button)
+        val connectButton = findViewById<Button>(R.id.Connectbutton)
+        val appSpinner = findViewById<Spinner>(R.id.appSpinner)
+        val apiSpinner = findViewById<Spinner>(R.id.apiName)
+        val roomSpinner = findViewById<Spinner>(R.id.roomSpinner)
 
         val threadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(threadPolicy)

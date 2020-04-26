@@ -1,0 +1,42 @@
+{
+
+  "OpenCellID" : {
+    "byte_code" : "1",
+
+    "measure/add" : {
+      "byte_code" : "1",
+      "params" : [
+        {
+          "name" : "lat",
+          "values" : "double-param"
+        },
+        {
+          "name" : "lon",
+          "values" : "double-param"
+        },
+        {
+          "name" : "mcc",
+          "values" : "int-param",
+          "length" : "1"
+        },
+        {
+          "name" : "mnc",
+          "values" : "int-param",
+          "length" : "2"
+        },
+        {
+          "name" : "lac",
+          "values" : "int-param",
+          "length" : "3"
+        },
+        {
+          "name" : "cellid",
+          "values" : "int-param",
+          "length" : "4"
+        }
+      ]
+    }
+
+  }
+
+}
