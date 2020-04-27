@@ -24,20 +24,8 @@ class MainActivity : AppCompatActivity() {
 
         val sendButton = findViewById<Button>(R.id.button)
 
-
-
-        //Call to the Logcat saying the app has started
-       // LogcatStart()
-
         sendButton.setOnClickListener {
-
-
-            // Initialize the LoRaMessenger object,   appSpinner example is TempControl
-
-            val openCellIDMessenger = LoRaMessenger("OpenCellID")
-
-            /* TODO: Improve the implementation below so that the developer does not need to call
-            readEncodingTable() themselves */
+            /* TODO: Improve the implementation below so that the developer does not need to call readEncodingTable() themselves */
 
             // Read the encoding table from assets
             val jsonString: String =
@@ -46,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             // Pass the encoding table to the messenger
-            openCellIDMessenger.readEncodingTable(jsonString)
+            val messenger = LoRaMessenger("OpenCellID", jsonString )
 
             //roomSpinner example is dining room (double lat, double lon, int mcc, int mnc, int lac, int cellID)
             val parameters: Array<Any> = arrayOf(latitude.text.toString().toDouble(),
@@ -57,11 +45,10 @@ class MainActivity : AppCompatActivity() {
                                                 cellID.text.toString().toInt())
 
             //message example is tempUp
-            openCellIDMessenger.sendLoRaMessage("measure/add", parameters)
+            messenger.sendLoRaMessage("measure/add", parameters )
 
         }
 
     }
-
 
 }
