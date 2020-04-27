@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import com.teamlora.loralibrary.LoRaMessenger
 import com.teamlora.loralibrary.LogcatStart
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
